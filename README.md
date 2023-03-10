@@ -1,2 +1,3 @@
-# -Data-driven-Ecology
- Data-driven-Ecology-homework
+# Data-driven-Ecology
+author: ZHR
+Data-driven-Ecology-homework
