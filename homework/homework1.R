@@ -1,4 +1,8 @@
 rm(list = ls())#清空输出
+
+#从R自带数据集中读取doubs数据，存为本地R文件
+
+
 library(datasets)
 library(ggplot2)
 help("datasets")
