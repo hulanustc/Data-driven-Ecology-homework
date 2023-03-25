@@ -35,7 +35,7 @@ l = nrow(df)
 colnames(df) <- c("x", "y")
 df <- as.data.frame(df)
 
-
+LR = 0.1
 
 prediction <- rep(0,10)
 df$pred_1 <- mean(df$y)
@@ -48,6 +48,7 @@ df$SSE_1 <- sum((df$f_1-df$y)**2)
 df$prediction <- df$T_1 
 df$resd_2 <- df$y - df$prediction
 
+
 sse_flag =  df$SSE_1[1]
 ##if(FALSE){}:多行注释
 if(FALSE){
@@ -58,6 +59,7 @@ if(FALSE){
     df[[paste0("SSE_",i)]] <- sum((df[[paste0("f_",i)]]-df$y)**2)
     df$prediction <- df$prediction + df[[paste0("T_",i)]]
     df[[paste0("resd_",i+1)]]  <- df$y -df$prediction
+    
   }
 }
 ##
