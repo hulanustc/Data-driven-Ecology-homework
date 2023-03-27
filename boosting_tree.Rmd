@@ -1,6 +1,22 @@
-rm(list = ls())
+---
+title: "boosting_tree"
+author: "Hengrui Zhao"
+date: "2023-03-27"
+output: html_document
+---
 
-library(ggplot2)
+```{r init}
+rm(list = ls())
+```
+
+## BOOSTING TREE
+```{r figname, echo=FALSE, fig.cap="A caption", out.width = '100%'}
+PATH = getwd()
+knitr::include_graphics(paste0(PATH,"/figure/boosting_tree.png"))
+```
+
+##CREATE A "T" FUNCTION
+```{r create a "T" function}
 T <- function(v){
   ##构造T函数
   len = length(v)
@@ -24,18 +40,23 @@ T <- function(v){
   result = c(result1, result2)
   return(result)
 }
+```
 
 
+## BUILD DATA：没有csv所以自己照书敲的
 
-
-#数据读取：没有csv所以自己照书敲的
+```{r BIULD DATA}
 df = matrix(c(1,2,3,4,5,6,7,8,9,10,5.56,5.70,5.91,6.4,6.8,7.05,8.9,8.7,9,9.05), 
             nrow= 10,ncol = 2)
 l = nrow(df)
 colnames(df) <- c("x", "y")
 df <- as.data.frame(df)
+```
 
 
+##Build the initial data for the recursive array
+
+```{r}
 prediction <- rep(0,10)
 df$pred_1 <- mean(df$y)
 df <- cbind(df[1],prediction,df[2:ncol(df)])
@@ -46,23 +67,27 @@ df$f_1 <- df$T_1
 df$SSE_1 <- sum((df$f_1-df$y)**2)
 df$prediction <- df$T_1 
 df$resd_2 <- df$y - df$prediction
-
-
 sse_flag =  df$SSE_1[1]
-##if(FALSE){}:多行注释
-if(FALSE){
-  nrounds <- 11
+```
+
+
+##First mode: Recursive by specifying the number of times
+
+```{r}
+nrounds <- 11
   for(i in 2:nrounds){
     df[[paste0("T_",i)]] <- T(df[[paste0("resd_",i)]])
     df[[paste0("f_",i)]] <- df[[paste0("f_",(i-1))]]+df[[paste0("T_",i)]] 
     df[[paste0("SSE_",i)]] <- sum((df[[paste0("f_",i)]]-df$y)**2)
     df$prediction <- df$prediction + df[[paste0("T_",i)]]
     df[[paste0("resd_",i+1)]]  <- df$y -df$prediction
-    
   }
-}
-##
+```
 
+
+##Second mode: Recursive by specifying SSE
+
+```{r}
 i=2
 while(sse_flag > 0.17){
   df[[paste0("T_",i)]] <- T(df[[paste0("resd_",i)]])
@@ -74,6 +99,12 @@ while(sse_flag > 0.17){
   i = i+1
 }
 nrounds = i-1
+```
+
+
+## PLOT SSE
+
+```{r}
 SSE_data <- df$SSE_1
 SSE_data = as.data.frame(SSE_data)
 for(i in 2:nrounds){
@@ -88,6 +119,5 @@ SSE_V <- cbind(as.numeric(rownames(SSE_V)),SSE_V)
 colnames(SSE_V)<-c("step","SSE")
 plot(SSE_V)
 lines(SSE_V)
-
-
+```
 
