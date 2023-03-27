@@ -82,6 +82,7 @@ nrounds <- 11
     df$prediction <- df$prediction + df[[paste0("T_",i)]]
     df[[paste0("resd_",i+1)]]  <- df$y -df$prediction
   }
+df
 ```
 
 
@@ -99,6 +100,7 @@ while(sse_flag > 0.17){
   i = i+1
 }
 nrounds = i-1
+df
 ```
 
 
